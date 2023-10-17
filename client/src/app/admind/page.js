@@ -1,8 +1,14 @@
 import React from 'react'
 
+import Dashboard from './dashboard'
 function AdminD() {
   return (
-    <div>Admin Dashboard</div>
+  <main className='px-24 jitems-center'>
+    <Dashboard/>
+  </main>
+  
+   
+ 
   )
 }
 

@@ -29,7 +29,7 @@ function forgetpassword() {
         }
       } catch (error) {
         console.error(error);
-        toast.error('Reset Error');
+        toast.error('Reset Password failed');
       }
      
     };

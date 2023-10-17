@@ -144,37 +144,38 @@ export const forgetController = async (req, res) => {
     try {
        const {email,newpassword,question} = req.body
        if(!email){
-        res.status(400).send({
+        
+        return res.status(400).send({
             
             message: 'Email is Required'
         })
        }
        if(!newpassword){
-        res.status(400).send({
+        return res.status(400).send({
             
             message: 'newpassword is Required'
         })
        }
        if(!question){
-        res.status(400).send({
+        return res.status(400).send({
             
             message: 'question is Required'
         })
        }
         // Checkuser
 
-        const Cuser = await usermodels.findOne({ email,question });
+        const user = await usermodels.findOne({ email,question });
 
         // Existing user
 
-        if (!Cuser) {
+        if (!user) {
             return res.status(404).send({
                 success: false,
                 message: 'wrong Email and question',
             });
         }
         const hasshed = await hashpassword(newpassword) 
-        await usermodels.findByIdAndUpdate(Cuser._id,{password:hasshed});
+        await usermodels.findByIdAndUpdate(user._id,{password:hasshed});
         res.status(200).send({
             success: true,
             message: 'Password Successfully Reset',

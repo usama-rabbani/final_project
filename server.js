@@ -5,6 +5,8 @@ import morgan from 'morgan'
 import ConnectDB from './config/db.js'
 import router from './Routes/authroutes.js'
 import cors from 'cors'
+import categoryroutes from './Routes/categoryroutes.js'
+import productroutes from './Routes/productroutes.js'
 // .env config
 
 dotenv.config();
@@ -25,7 +27,8 @@ app.use(morgan("dev"))
 // Routes
 
 app.use('/api/vi/auth',router)
-
+app.use('/api/vi/category',categoryroutes)
+app.use('/api/vi/product',productroutes)
 
 app.get('/', (req, res) => {
     res.send("<h1>Welcome To Mern Stack Project</h1>")

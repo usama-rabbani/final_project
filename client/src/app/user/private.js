@@ -9,6 +9,7 @@ const PrivateRoute = () => {
     const [ok, setOk] = useState();
     const { auth } = useauth();
 
+   
     useEffect(() => {
         const authCheck = async () => {
             try {

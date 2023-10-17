@@ -377,14 +377,14 @@ function classNames(...classes) {
       <div className="relative">
       <button
         onClick={toggleDropdown}
-        className="flex items-center p-2 space-x-10 rounded focus:outline-none"
+        className="flex items-center p-2 space-x-5 rounded focus:outline-none"
       >
         <p className='text-sm text-red-600 font-bold '>{auth?.user?.name}</p>
         
         <FaUserTie className='text-3xl  hover:bg-blue-300 hover:border-[1px] absolute p-1 rounded-full bg-gray-300' />
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className={`w-4 h-4  transition-transform transform ${
+          className={`w-4 h-4 pr-6 transition-transform transform ${
             isOpen ? 'rotate-180' : 'rotate-0'
           }`}
           viewBox="0 0 20 20"

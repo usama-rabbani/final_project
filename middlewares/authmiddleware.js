@@ -1,5 +1,5 @@
 import JWT from "jsonwebtoken";
-
+import usermodels from "../models/usermodels.js";
 // Protected Routes
 export const requireSignin = async (req, res, next) => {
   try {
@@ -18,27 +18,35 @@ export const requireSignin = async (req, res, next) => {
   }
 };
 
-// Admin Authorization
+// Admin Authentication
 
-export const isAdmin = async (req, res , next)=>{
-    try {
-        const user = await usermodels.findById(req.user.id)
-        if(user.role!=='admin'){
-            return  res.status(401).send({
-                successs:false,
-                message:'Unauthorized Access',
-                
-                    });
-        }
-        else{
-            next()
-        }
-    } catch (error) {
-        console.log(error);
-        return  res.status(401).send({
-            successs:false,
-            message:'Error in ADmin Middleware',
-            error
-                })
+export const isAdmin = async (req, res, next) => {
+  try {
+   
+    const user = await usermodels.findById(req.user._id);
+
+
+    if (!user) {
+      return res.status(401).send({
+        success: false,
+        message: 'User not found',
+      });
     }
-}
+
+    if (user.role !== 'admin') {
+      return res.status(401).send({
+        success: false,
+        message: 'Unauthorized Access',
+      });
+    } else {
+      next();
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({
+      success: false,
+      message: 'Error in Admin Middleware',
+      error: error.message,
+    });
+  }
+};
