@@ -47,9 +47,10 @@ export const category = async (req, res) => {
 try {
   
    const { name } = req.body;
-   const { id } = req.params;
+   const { _id } = req.params;
    const slug = slugify(name);
-   const updatecat= await createcategory.findByIdAndUpdate(id,{ name, slug }, {new:true} );
+   const updatecat= await createcategory.findByIdAndUpdate(_id,{ name, slug }, {new:true} );
+   console.log(updatecat);
    return res.status(200).send({
     success: true,
     message: 'Category is Updated Successfully',

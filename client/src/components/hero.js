@@ -18,7 +18,7 @@ const data=[
 function Hero() {
     const items = data.map((item)=>{
         return(
-    <img className='cursor-pointer w-full h-[70vh] -z-10' role='presentation' src={item.img} alt = ''></img>
+    <img className='cursor-pointer w-full md:h-[70vh] -z-10' role='presentation' src={item.img} alt = ''></img>
         )
     })
   return (

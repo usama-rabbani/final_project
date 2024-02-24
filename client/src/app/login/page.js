@@ -2,10 +2,12 @@
 import React, {useState } from 'react'
 import {toast} from 'react-toastify'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 import { useauth } from '../../context/auth'
 import Link from 'next/link'
 function page() {
+  const router = useRouter()
     const [email, setemail] = useState()
     const [password, setpassword] = useState()
     const { auth, setAuth } = useauth();
@@ -25,7 +27,7 @@ function page() {
             token: res.data.token,
           });
           localStorage.setItem('auth',JSON.stringify(res.data))
-          window.location.href = '/user';
+          router.push('/user')
          
         } else {
           toast.error(res.data.message);

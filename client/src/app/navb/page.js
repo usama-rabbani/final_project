@@ -2,35 +2,46 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import {data} from './data'
+import { data } from './data'
+import FORM from '../Home/form'
 import Link from 'next/link'
-import {toast} from 'react-toastify'
-import {useauth} from '../../context/auth'
-import {FaUserTie} from 'react-icons/fa'
-import AdminD from '../admind/page'
-import Userd from '../userd/page'
+import cartpage from '../cartpage/page'
+import { toast } from 'react-toastify'
+import { useCart } from '../../context/cart'
+import { useauth } from '../../context/auth'
+import { FaUserTie } from 'react-icons/fa'
+// import userd from '../userd/page'
+import useCategory from '@/hooks/useCategory'
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
- function Navb () {
+function Navb() {
+
+  const categoriess = useCategory()
   const [open, setOpen] = useState(false)
   const { auth, setAuth } = useauth();
   const [isOpen, setIsOpen] = useState(false);
-
+  const [isopen, setopen] = useState(false)
+  const [cart] = useCart() || [];
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleclick = ()=>{
+  const togglecategories = () => {
+    setopen(!isopen);
+  };
+  const handleclick = () => {
     setAuth({
       ...auth,
-      user:null,
+      user: null,
       token: ''
     })
     localStorage.removeItem('auth')
-    toast.success( 'Logout Successfully');
+    toast.success('Logout Successfully');
   }
+  const isAdmin = auth?.user?.role === 'admin';
+  const dashboardPage = isAdmin ? '/admin' : '/user';
   return (
     <div className="bg-white ">
       {/* Mobile menu */}
@@ -74,7 +85,7 @@ function classNames(...classes) {
                 {/* Links */}
                 <Tab.Group as="div" className="mt-2">
                   <div className="">
-                    <Tab.List className="-mb-px flex space-x-8 px-4">
+                    <Tab.List className="-mb-px md:flex md:space-x-8 px-4">
                       {data.categories.map((category) => (
                         <Tab
                           key={category.name}
@@ -110,7 +121,7 @@ function classNames(...classes) {
                           ))}
                         </div>
                         {category.sections.map((section) => (
-                          <div  key={section.name}>
+                          <div key={section.name}>
                             <p id={`${category.id}-${section.id}-heading-mobile`} className="font-medium text-gray-900 focus:none">
                               {section.name}
                             </p>
@@ -145,74 +156,73 @@ function classNames(...classes) {
                 </div>
 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                {!auth.user ?(
-            <>
-             <Link href={'/registered'} className="text-sm font-semibold leading-6 text-gray-900">
-             Register <span aria-hidden="true">&rarr;</span>
-            </Link>
-            <Link href={'/login'} className="text-sm font-semibold leading-6 text-gray-900">
-              Log in <span aria-hidden="true">&rarr;</span>
-            </Link>
-            </>
-          ):(
-            <>
-      <div className="relative">
-      <button
-        onClick={toggleDropdown}
-        className="flex items-center p-2  rounded focus:outline-none"
-      >
-        <p className='text-sm text-red-600 font-bold '>{auth?.user?.name}</p>
-        <FaUserTie className='text-3xl hover:bg-blue-300 hover:border-[1px] absolute p-1 ml-16 rounded-full bg-gray-300' />
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className={`w-4 h-4 ml-12 transition-transform transform ${
-            isOpen ? 'rotate-180' : 'rotate-0'
-          }`}
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M10 3a1 1 0 011 1v9.293l3.646-3.647a1 1 0 111.415 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 13.293V4a1 1 0 011-1z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </button>
-      {isOpen && (
-        <div className="absolute   bg-white border rounded-lg shadow-lg">
-          <ul>
-          {auth.user ? (
-            <>
-        <li className="py-2 px-4 cursor-pointer hover:bg-gray-100" onClick={handleclick }>
-          <Link href="/login">
-            Logout
-          </Link>
-        </li>
-         <li className="py-2 px-4 cursor-pointer hover:bg-gray-100" >
-         <Link href={`dashboard ${auth?.user?.role === 'admin' ? AdminD: Userd}`}>
-           Dashboard
-         </Link>
-       </li>
-       
-       </>
-      ) : (
-        <li className="py-2 px-4 cursor-pointer hover:bg-gray-100">
-          <Link href="/login">
-            Login
-          </Link>
-        </li>
-      )}
-            
-          </ul>
-        </div>
-      )}
-    </div>
-          </>
-          
-          )
-          
-        }
-                 
+                  {!auth.user ? (
+                    <div className='flex space-x-2'>
+                      <Link href={'/registered'} className="text-sm  leading-6 bg-orange-500 px-4 py-2 rounded-md text-white">
+                        Register <span aria-hidden="true">&rarr;</span>
+                      </Link>
+                      <Link href={'/login'} className="text-sm  leading-6 bg-orange-500 px-4 py-2 rounded-md text-white">
+                        Log in <span aria-hidden="true">&rarr;</span>
+                      </Link>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="relative">
+                        <button
+                          onClick={toggleDropdown}
+                          className="flex items-center p-2  rounded focus:outline-none"
+                        >
+                          <p className='text-sm text-red-600 font-bold '>{auth?.user?.name}</p>
+                          <FaUserTie className='text-3xl hover:bg-blue-300 hover:border-[1px] absolute p-1 ml-16 rounded-full bg-gray-300' />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className={`w-4 h-4 ml-12 transition-transform transform ${isOpen ? 'rotate-180' : 'rotate-0'
+                              }`}
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 3a1 1 0 011 1v9.293l3.646-3.647a1 1 0 111.415 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 13.293V4a1 1 0 011-1z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                        {isOpen && (
+                          <div className="absolute   bg-white border rounded-lg shadow-lg">
+                            <ul>
+                              {auth.user ? (
+                                <>
+                                  <li className="py-2 px-4 cursor-pointer hover:bg-gray-100" onClick={handleclick}>
+                                    <Link href="/login">
+                                      Logout
+                                    </Link>
+                                  </li>
+                                  <li className="py-2 px-4 cursor-pointer hover:bg-gray-100" >
+                                    <Link href={`dashboard ${auth?.user?.role === 'admin' ? admind : user}`}>
+                                      Dashboard
+                                    </Link>
+                                  </li>
+
+                                </>
+                              ) : (
+                                <li className="text-sm  bg-orange-500 px-4 py-2 rounded-md text-white leading-6">
+                                  <Link href="/login">
+                                    Login
+                                  </Link>
+                                </li>
+                              )}
+
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </>
+
+                  )
+
+                  }
+
                 </div>
 
                 <div className="border-t border-gray-200 px-4 py-6">
@@ -256,7 +266,7 @@ function classNames(...classes) {
                   <span className="sr-only">Your Company</span>
                   <img
                     className="h-20 "
-                    src="images/logo.png"
+                    // src="images/logo.png"
                     alt=""
                   />
                 </a>
@@ -359,77 +369,140 @@ function classNames(...classes) {
                       {page.name}
                     </a>
                   ))}
+                  <FORM />
                 </div>
               </Popover.Group>
 
               <div className="ml-auto flex items-center">
-              {!auth.user ?(
-            <>
-             <Link href={'/registered'} className="text-sm font-semibold leading-6 text-gray-900">
-             Register <span aria-hidden="true">&rarr;</span>
-            </Link>
-            <Link href={'/login'} className="text-sm font-semibold leading-6 text-gray-900">
-              Log in <span aria-hidden="true">&rarr;</span>
-            </Link>
-            </>
-          ):(
-            <>
-      <div className="relative">
-      <button
-        onClick={toggleDropdown}
-        className="flex items-center p-2 space-x-5 rounded focus:outline-none"
-      >
-        <p className='text-sm text-red-600 font-bold '>{auth?.user?.name}</p>
-        
-        <FaUserTie className='text-3xl  hover:bg-blue-300 hover:border-[1px] absolute p-1 rounded-full bg-gray-300' />
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className={`w-4 h-4 pr-6 transition-transform transform ${
-            isOpen ? 'rotate-180' : 'rotate-0'
-          }`}
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M10 3a1 1 0 011 1v9.293l3.646-3.647a1 1 0 111.415 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 13.293V4a1 1 0 011-1z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </button>
-      {isOpen && (
-        <div className="absolute   bg-white border rounded-lg shadow-lg">
-          <ul>
-          {auth.user ? (
-            <>
-        <li className="py-2 px-4 cursor-pointer hover:bg-gray-100" onClick={handleclick }>
-          <Link href="/login">
-            Logout
-          </Link>
-        </li>
-         <li className="py-2 px-4 cursor-pointer hover:bg-gray-100" >
-         <Link href={`dashboard ${auth?.user?.role === 'admin' ? AdminD: Userd}`}>
-           Dashboard
-         </Link>
-       </li>
-       </>
-      ) : (
-        <li className="py-2 px-4 cursor-pointer hover:bg-gray-100">
-          <Link href="/login">
-            Login
-          </Link>
-        </li>
-      )}
-            
-          </ul>
-        </div>
-      )}
-    </div>
-          </>
-          
-          )
-          
-        }
+                <div>
+                  <button
+                    onClick={togglecategories}
+                    className="flex items-center p-2 space-x-1 rounded focus:outline-none"
+                  >
+                    <p className="text-sm text-red-600 font-bold">Categories</p>
+
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className={`w-4 h-4 transition-transform transform ${isopen ? 'rotate-180 ' : 'rotate-0'
+                        }`}
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 3a1 1 0 011 1v9.293l3.646-3.647a1 1 0 111.415 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 13.293V4a1 1 0 011-1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    {isopen && (
+                      <div className='absolute mt-44 '>
+                        {categoriess.map((category) => (
+                          <div key={category._id} className='bg-black px-6 py-1   rounded-md '>
+                            <Link href={`/category/${category.slug}`} className='hover:text-red-600 text-white border-b-2 border-yellow-500'> {category.name}</Link>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </button>
+
+                </div>
+                <div>
+                  {!auth.user ? (
+                    <div className='md:flex hidden items-center space-x-2'>
+                      <Link href={'/registered'} className="text-sm  leading-6 bg-orange-500 px-4 py-2 rounded-md text-white">
+                        Register 
+                      </Link>
+                      <Link href={'/login'} className="text-sm  bg-orange-500 px-4 py-2 rounded-md text-white leading-6 ">
+                        Log in 
+                      </Link>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="relative">
+                        <button
+                          onClick={toggleDropdown}
+                          className="flex items-center p-2 space-x-5 rounded focus:outline-none"
+                        >
+                          <p className='text-sm text-red-600 font-bold '>{auth?.user?.name}</p>
+
+                          <FaUserTie className='text-3xl hover:bg-blue-300 hover:border-[1px] absolute p-1 rounded-full bg-gray-300' />
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className={`w-4 h-4 pr-6 transition-transform transform ${isOpen ? 'rotate-180' : 'rotate-0'
+                              }`}
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M10 3a1 1 0 011 1v9.293l3.646-3.647a1 1 0 111.415 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 111.414-1.414L9 13.293V4a1 1 0 011-1z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                        {isOpen && (
+                          <div className="absolute   bg-white border rounded-lg shadow-lg">
+                            <ul>
+                              {auth.user ? (
+                                <>
+                                  <li className="py-2 px-4 cursor-pointer hover:bg-gray-100" onClick={handleclick}>
+                                    <Link href="/login">
+                                      Logout
+                                    </Link>
+                                  </li>
+                                  <li className="py-2 px-4 cursor-pointer hover:bg-gray-100" >
+                                    <Link href={dashboardPage}>
+                                      Dashboard
+                                    </Link>
+                                  </li>
+                                </>
+                              ) : (
+                                <li className="py-2 px-4 cursor-pointer hover:bg-gray-100">
+                                  <Link href="/login">
+                                    Login
+                                  </Link>
+                                </li>
+                              )}
+
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    </>
+
+                  )
+
+                  }
+                </div>
+                <>
+                  {/* component */}
+                  <div className=" flex justify-center items-center md:pl-2">
+                    <Link href={'/cartpage'}>
+                      <div className="relative py-2">
+                        <div className="t-0 absolute ">
+                          <p className="flex h-2 -mt-2 w-2 items-center  justify-center rounded-full bg-red-500 p-2 text-[10px] text-white">
+                            {cart?.length}
+                          </p>
+                        </div>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          stroke="currentColor"
+                          className="file:  h-6 w-6"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
+                          />
+                        </svg>
+                      </div>
+                    </Link>
+                  </div>
+                </>
+
               </div>
             </div>
           </div>

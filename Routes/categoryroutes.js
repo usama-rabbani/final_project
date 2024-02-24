@@ -5,12 +5,15 @@ import {category , updatecategory , allcategories , Singlecategories , Deletecat
 const router = express.Router()
 // Create Category
 
-router.post('/categories', requireSignin, isAdmin, category );
+router.post('/categories', category );
 
+
+//router.post('/categories', requireSignin, isAdmin, category );
 // Update Category
 
-router.put ('/updatecategories/:id', requireSignin, isAdmin, updatecategory );
+router.put ('/updatecategories/:_id',  updatecategory );
 
+//router.put ('/updatecategories/:id', requireSignin, isAdmin, updatecategory );
 // Get All Categories
 
 router.get ('/allcategories',  allcategories );
@@ -20,7 +23,9 @@ router.get ('/allcategories',  allcategories );
 router.get ('/singlecategories/:slug',  Singlecategories );
 
 // Delete Category
-
-router.delete ('/deletecategories/:id', requireSignin, isAdmin, Deletecategory );
+router.delete ('/deletecategories/:id', Deletecategory );
+//router.delete ('/deletecategories/:id', requireSignin, isAdmin, Deletecategory );
 
 export default router 
+
+

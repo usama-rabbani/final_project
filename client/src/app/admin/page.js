@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Dashboard from './dashboard'
-function AdminD() {
+function Admin() {
   return (
   <main className='px-24 jitems-center'>
     <Dashboard/>
@@ -12,4 +12,4 @@ function AdminD() {
   )
 }
 
-export default AdminD
+export default Admin
