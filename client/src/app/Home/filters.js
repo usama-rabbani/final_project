@@ -4,6 +4,7 @@ import { FaPlus, FaMinus } from 'react-icons/fa';
 import axios from 'axios';
 import { useRouter } from 'next/navigation'
 import { Prices } from './pricedata';
+import { motion } from 'framer-motion'
 import { toast } from 'react-toastify'
 import { useCart } from '@/context/cart';
 function Accordion() {
@@ -131,7 +132,17 @@ function Accordion() {
 
         <section className='mx-auto  max-w-7xl px-4 py-4 sm:px-6 md:px-8'>
 
-            <div className='md:flex md:space-x-16 space-y-6 md:space-y-0'>
+            <motion.div
+                initial={{ x: '100%', opacity: 0 }}
+                whileInView={{ x: 0, opacity: 1 }}
+                exit={{ y: '100%', opacity: 0 }}
+                transition={{
+                    stiffness: 100,
+                    damping: 15,
+                    duration: 1,
+                    ease: "easeIn",
+                }}
+                className='md:flex md:space-x-16 space-y-6 md:space-y-0'>
 
 
                 <div>
@@ -166,7 +177,7 @@ function Accordion() {
                                     {categories.map((item) => (
                                         <div key={item._id} className="flex space-x-16 items-center pl-6 pb-3">
                                             <input type="checkbox" className="h-8 w-8 rounded border-gray-300" onChange={(e) => handlecategoryfilter(e.target.checked, item._id)} />
-                                            <li className="text-sm text-xl font-bold text-gray-700 list-none	">{item.name}</li>
+                                            <li className="text-xl font-bold text-gray-700 list-none	">{item.name}</li>
                                         </div>
                                     ))}
                                 </label>
@@ -227,20 +238,30 @@ function Accordion() {
 
                 <div>
                     <div>
-                        <div className='md:grid md:grid-cols-3 gap-4 space-y-4 md:space-y-0'>
+                        <div
+                            className='md:grid md:grid-cols-3 gap-4 space-y-4 md:space-y-0'>
                             {products?.map((item) => {
 
                                 return (
 
-                                    <div key={item._id} className='w-64 '>
+                                    <motion.div
+                                        initial={{ y: '-100%', opacity: 0 }}
+                                        whileInView={{ y: 0, opacity: 1 }}
+                                        exit={{ y: '100%', opacity: 0 }}
+                                        transition={{
+                                            stiffness: 100,
+                                            damping: 15,
+                                            duration: 1,
+                                            ease: "easeIn",
+                                        }} key={item._id} className='w-64 '>
                                         <div className="  bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                                           
-                                                <img
-                                                    className="rounded-t-lg w-64 h-36"
-                                                    src={`http://localhost:8080/api/vi/product/getimage/${item._id}`}
-                                                    alt={item.image}
-                                                />
-                                        
+
+                                            <img
+                                                className="rounded-t-lg w-64 h-36"
+                                                src={`http://localhost:8080/api/vi/product/getimage/${item._id}`}
+                                                alt={item.image}
+                                            />
+
                                             <div className="px-5 pb-5 bg-slate-200">
                                                 <div className='flex justify-between items-center'>
                                                     <h5 className="text-lg tracking-tight text-gray-900 dark:text-white">
@@ -251,7 +272,7 @@ function Accordion() {
                                                     </span>
                                                 </div>
 
-                                               
+
                                                 <div className='flex justify-between items-center mt-2'>
                                                     <button onClick={() => router.push(`/readmore/${item.slug}`)}
 
@@ -272,7 +293,7 @@ function Accordion() {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </motion.div>
 
 
 
@@ -286,7 +307,7 @@ function Accordion() {
                     </div>
                 </div>
 
-            </div>
+            </motion.div>
 
 
 

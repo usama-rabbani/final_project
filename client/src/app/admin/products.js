@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'; import axios from 'axios'
-import { toast } from 'react-toastify'
 import Link from 'next/link';
+import { motion } from 'framer-motion'
+import { toast } from 'react-toastify'
 function Products() {
   const [products, setproducts] = useState([])
   // Get All Products
@@ -20,45 +21,42 @@ function Products() {
     GetAllProducts();
   }, [])
   return (
-    <main>
+    <section className='max-w-[1000px]'>
 
-      <div>
-        <h1>This is a Product Page</h1>
-
-      </div>
-      <div className='grid grid-cols-3 gap-4'>
+      <motion.div
+        initial={{ x: '100%', opacity: 0 }}
+        whileInView={{ x: 0, opacity: 1 }}
+        exit={{ x: '100%', opacity: 0 }}
+        transition={{
+          stiffness: 100,
+          damping: 15,
+          duration: 1,
+          ease: "easeIn",
+        }} className='md:grid md:grid-cols-3 gap-4  '>
         {products?.map((item) => {
 
           return (
-            <Link key={item._id} href={`/admin/${item.slug}`}
+            <Link className='' key={item._id} href={`/admin/${item.slug}`}
             // {`/admin/dashboard/${item.slug}`}
             >
-              <div className='lg:w-72 w-full'>
-                <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                  <a href="#">
-                    <img
-                      className="rounded-t-lg"
-                      src={`http://localhost:8080/api/vi/product/getimage/${item._id}`}
-                      alt={item.image}
-                    />
-                  </a>
-                  <div className="px-5 pb-5">
-                    <a href="#">
-                      <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+              <div className='md:w-64 '>
+                <div className="  bg-white border border-gray-200 rounded-lg mb-4 md:mb-0 shadow dark:bg-gray-800 dark:border-gray-700">
+
+
+                  <img
+                    className="rounded-t-lg w-64 h-36"
+                    src={`http://localhost:8080/api/vi/product/getimage/${item._id}`}
+                    alt={item.image}
+                  />
+
+                  <div className="px-5 pb-5 bg-slate-200">
+                    <div className='flex justify-between items-center'>
+                      <h5 className="text-lg tracking-tight text-gray-900 dark:text-white">
                         {item.name}
                       </h5>
-                    </a>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-gray-900 dark:text-white">
+                      <span className="text-lg font-bold text-gray-900 dark:text-white">
                         ${item.price}
                       </span>
-                      <a
-                        href="#"
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                      >
-                        Add to cart
-                      </a>
                     </div>
                   </div>
                 </div>
@@ -69,8 +67,8 @@ function Products() {
 
         })}
 
-      </div>
-    </main>
+      </motion.div>
+    </section>
 
   )
 }

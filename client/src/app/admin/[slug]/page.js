@@ -4,7 +4,7 @@ import { Select } from 'antd';
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { useParams, useRouter , useSearchParams} from 'next/navigation'
-
+import { motion } from 'framer-motion'
 const { Option } = Select
 
 function singleproductSlug() {
@@ -83,7 +83,7 @@ function singleproductSlug() {
       const { data } = await axios.put(`http://localhost:8080/api/vi/product/updateproduct/${id}`, ProductD)
       if (data?.success) {
         toast.success('Product is Updated Successfully');
-         router.push('/admind')
+         router.push('/admin')
       }
       else{
         toast.error(data?.message); 
@@ -106,7 +106,7 @@ function singleproductSlug() {
      
         const { data } = await axios.delete(`http://localhost:8080/api/vi/product/deleteproduct/${id}`);
         toast.success('Product is deleted successfully');
-        router.push('/admind');
+        router.push('/admin');
       } catch (error) {
         console.error(error);
         toast.error('Something went wrong');
@@ -115,7 +115,16 @@ function singleproductSlug() {
   };
   
   return (
-    <main className='items-center justify-center px-6  mx-auto mb-6'>
+    <motion.section
+    initial={{ y: '-100%', opacity: 0 }}
+    whileInView={{ y: 0, opacity: 1 }}
+    exit={{ y: '100%', opacity: 0 }}
+    transition={{
+      stiffness: 100,
+      damping: 15,
+      duration: 1,
+      ease: "easeIn",
+    }} className='items-center justify-center px-6  mx-auto mb-6'>
     
         <Select
           mode="multiple"
@@ -135,14 +144,12 @@ function singleproductSlug() {
           })}
         </Select>
 
-        <div className="mt-6 ">
-        
-          <label className=' cursor-pointer hover:bg-red-200 rounded-lg py-2 px-36 bg-red-100'>
-            {image ? image.name : "Upload File"}
-            <input type="file" name="image" id="" className="lg:w-[50rem]" onChange={(e) => { setimage(e.target.files[0]) }} hidden accept="image/*" ></input>
-          </label>
-        </div>
-
+        <div className="mt-6 text-center">
+        <label className=' cursor-pointer hover:bg-red-200 rounded-lg py-2 md:px-36 px-16  bg-red-100'>
+          {image ? image.name : "Upload File"}
+          <input type="file" name="image" id="" className="md:w-[50rem] w-full" onChange={(e) => { setimage(e.target.files[0]) }} hidden accept="image/*" ></input>
+        </label>
+      </div>
         <div className="mt-6 ">
           {image ? (
             <div className=''>
@@ -237,7 +244,7 @@ step="0"
 
     
        
-    </main>
+    </motion.section>
   )
 }
 

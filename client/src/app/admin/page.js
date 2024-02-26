@@ -3,7 +3,7 @@ import React from 'react'
 import Dashboard from './dashboard'
 function Admin() {
   return (
-  <main className='px-24 jitems-center'>
+  <main className=''>
     <Dashboard/>
   </main>
   

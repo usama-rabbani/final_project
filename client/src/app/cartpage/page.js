@@ -1,5 +1,5 @@
 'use client'
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useCart } from '@/context/cart';
 import { useauth } from '@/context/auth'
 import { Button } from 'antd';
@@ -7,11 +7,11 @@ import { toast } from 'react-toastify';
 import { BsFillPlusCircleFill } from 'react-icons/bs'
 import { BiSolidMinusCircle } from 'react-icons/bi'
 import { useRouter } from 'next/navigation'
-
+import { motion } from 'framer-motion'
 import DropIn from "braintree-web-drop-in-react";
 import axios from 'axios';
 
-const cartpage=()=> {
+const cartpage = () => {
   const router = useRouter()
   const { auth, setAuth } = useauth();
   const [cart, setCart] = useCart();
@@ -53,10 +53,19 @@ const cartpage=()=> {
   };
 
 
-  
+
   return (
     <main className=' items-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
-      <h1 className="text-center bg-light p-2 mb-1">
+      <motion.h1
+          initial={{ x:'-100%', opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          exit={{ y: '100%', opacity: 0 }}
+          transition={{
+            stiffness: 100,
+            damping: 15,
+            duration: 1,
+            ease: "easeIn",
+          }} className="text-center bg-light p-2 mb-1">
         {!auth?.user
           ? "Hello Guest"
           : `Hello  ${auth?.token && auth?.user?.name}`}
@@ -64,14 +73,23 @@ const cartpage=()=> {
           {cart?.length
             ? `You Have ${cart.length} items in your cart ${auth?.token ? "" : "please login to checkout !"
             }` : " Your Cart Is Empty"}</p>
-      </h1>
-      <div className='grid grid-cols-2 '>
-        <div className="text-center bg-light p-2 mb-1">
+      </motion.h1>
+      <div className='md:grid md:grid-cols-2 '>
+      <motion.div
+          initial={{ y:'-100%', opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          exit={{ y: '100%', opacity: 0 }}
+          transition={{
+            stiffness: 100,
+            damping: 15,
+            duration: 1,
+            ease: "easeIn",
+          }} className="text-center bg-light p-2 mb-1 space-y-2 md-space-y-0">
           {cart?.map((item) => {
             return (
-              <div key={item._id} className='lg:grid grid-cols-4 gap-5 items-center w-[45rem] border-2 px-6 py-8'>
+              <div key={item._id} className='md:grid md:grid-cols-4 gap-5 items-center md:w-[45rem] border-2 px-6 py-8'>
                 <img
-                  className="rounded-t-lg w-36 h-24  border-2 px-3 py-2"
+                  className="rounded-t-lg m-auto w-36 h-24  border-2 px-3 py-2"
                   src={`http://localhost:8080/api/vi/product/getimage/${item._id}`}
                   alt={item.image}
                 />
@@ -79,18 +97,29 @@ const cartpage=()=> {
                   <p className="text-lg font-bold"> {item.name}</p>
                   <p className="text-lg font-bold"> ${item.price}</p>
                 </div>
-                <div className='flex mx-auto text-center  icons items-center bg-black lg:px-6 lg:py-2 border-t-teal-600  border-l-yellow-500  border-r-red-500  border-b-fuchsia-700 border-[5px]'>
+                <div  className='md:flex items-center md:space-x-4 md:sapce-y-0 space-y-2'>
+                <div className='flex mx-auto text-center  icons items-center bg-black md:px-6 md:py-2 border-t-teal-600  border-l-yellow-500  border-r-red-500  border-b-fuchsia-700 border-[5px]'>
                   <BsFillPlusCircleFill className=" mx-auto text-center  fill-white cursor-pointer lg:text-2xl hover:fill-red-500 " onClick={() => increment(item._id)} />
                   <p className="text-white lg:mx-5">{quantity}</p>
                   <BiSolidMinusCircle className=" mx-auto text-center  fill-white cursor-pointer lg:text-3xl hover:fill-red-500" onClick={() => decrement(item._id)} /></div>
                 <div>
                   <Button className='bg-black text-red-500 ' onClick={() => removeCartItem(item._id)}>Remove Item</Button>
                 </div>
+                </div>
               </div>
             )
           })}
-        </div>
-        <div className=' w-[25rem]  ml-36 border-2 px-6 py-8 mb-4'>
+        </motion.div>
+         <motion.div
+          initial={{ x:'-100%', opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          exit={{ y: '100%', opacity: 0 }}
+          transition={{
+            stiffness: 100,
+            damping: 15,
+            duration: 1,
+            ease: "easeIn",
+          }} className=' md:w-[25rem]  md:ml-36 border-2 px-6 py-8 mb-4'>
           <div className="text-center ">
             <h1 className="text-center text-2xl font-bold"> Cart Summary</h1>
             <p className="pt-4 pb-4">Total | Checkout | Payment </p>
@@ -145,23 +174,23 @@ const cartpage=()=> {
             )}
           </div>
 
-<div className='text-center mt-6'>
+          <div className='text-center mt-6'>
 
-<DropIn    
-options={{
-authorization: clientToken,
-paypal:{
-  flow:'vault'
-}
+            <DropIn
+              options={{
+                authorization: clientToken,
+                paypal: {
+                  flow: 'vault'
+                }
 
-}}
-onInstance={(instance) => setInstance(instance)}
+              }}
+              onInstance={(instance) => setInstance(instance)}
 
-/>
-<button className='w-full  py-2 bg-blue-700 text-white font-bold hover:text-black'>Make Payment</button>
-</div>
+            />
+            <button className='w-full  py-2 bg-blue-700 text-white font-bold hover:text-black'>Make Payment</button>
+          </div>
 
-        </div>
+        </motion.div>
       </div>
     </main>
   )

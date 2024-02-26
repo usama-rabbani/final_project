@@ -37,7 +37,7 @@ function projectdetail() {
   };
 
   return (
-    <main className='mx-auto  max-w-7xl px-4 sm:px-6 lg:px-8'>
+    <main className='mx-auto  px-4 container py-4 sm:px-6 lg:px-8'>
 
       <div className='md:grid md:grid-cols-2 '>
         <div>
@@ -105,7 +105,7 @@ function projectdetail() {
             <h1 className=' font-bold flex items-center '>Price: <p className='text-[15px] font-normal pl-2'>${product.price}</p> </h1>
             <h1 className=' font-bold flex items-center '>category:  <p className='text-[15px] font-normal pl-2'>{product.category}</p> </h1>
             <h1 className=' font-bold flex items-center '>Shipping:  <p className='text-[15px] font-normal pl-2'>{product.shipping}</p> </h1>
-            <button className='px-8 md:w-0 w-full bg-black/20 text-white hover:text-red-700 py-2 rounded-full'>Add to Cart</button>
+            <button className=' md:w-36 w-full bg-black/20 text-white hover:text-red-700 py-2 rounded-full'>Add to Cart</button>
           </div>
         </div>
       </div>

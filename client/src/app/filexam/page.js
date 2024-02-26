@@ -106,7 +106,7 @@ const FilteredProducts = () => {
                     name="priceGroup"
                     onChange={(e) => setradio(e.target.value)}
                 />
-                <li className="text-sm text-xl font-bold text-gray-700 list-none">{item.name}</li>
+                <li className="text-sm  font-bold text-gray-700 list-none">{item.name}</li>
             </div>
         ))}
     </label>

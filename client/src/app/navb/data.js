@@ -117,6 +117,6 @@ export const data = {
   ],
   pages: [
     { name: 'Home', href: '/Home' },
-    { name: 'Stores', href: '#' },
+    { name: 'Blogs', href: '/blogs' },
   ],
 }

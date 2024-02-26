@@ -10,7 +10,7 @@ import { toast } from 'react-toastify'
 import { useCart } from '../../context/cart'
 import { useauth } from '../../context/auth'
 import { FaUserTie } from 'react-icons/fa'
-// import userd from '../userd/page'
+import { motion } from 'framer-motion'
 import useCategory from '@/hooks/useCategory'
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -279,7 +279,17 @@ function Navb() {
                     <Popover key={category.name} className="flex">
                       {({ open }) => (
                         <>
-                          <div className="relative flex">
+                          <motion.div
+                            initial={{ y: '-100%', opacity: 0 }}
+                            whileInView={{ y: 0, opacity: 1 }}
+                            exit={{ y: '100%', opacity: 0 }}
+                            transition={{
+                              stiffness: 100,
+                              damping: 15,
+                              duration: 0.5,
+                              ease: "easeIn",
+                            }}
+                            className="relative flex">
                             <Popover.Button
                               className={classNames(
                                 open
@@ -290,7 +300,7 @@ function Navb() {
                             >
                               {category.name}
                             </Popover.Button>
-                          </div>
+                          </motion.div>
 
                           <Transition
                             as={Fragment}
@@ -361,13 +371,22 @@ function Navb() {
                   ))}
 
                   {data.pages.map((page) => (
-                    <a
+                    <motion.a
+                      initial={{ y: '-100%', opacity: 0 }}
+                      whileInView={{ y: 0, opacity: 1 }}
+                      exit={{ y: '100%', opacity: 0 }}
+                      transition={{
+                        stiffness: 100,
+                        damping: 15,
+                        duration: 0.5,
+                        ease: "easeIn"
+                      }}
                       key={page.name}
                       href={page.href}
                       className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
                     >
                       {page.name}
-                    </a>
+                    </motion.a>
                   ))}
                   <FORM />
                 </div>
@@ -410,10 +429,10 @@ function Navb() {
                   {!auth.user ? (
                     <div className='md:flex hidden items-center space-x-2'>
                       <Link href={'/registered'} className="text-sm  leading-6 bg-orange-500 px-4 py-2 rounded-md text-white">
-                        Register 
+                        Register
                       </Link>
                       <Link href={'/login'} className="text-sm  bg-orange-500 px-4 py-2 rounded-md text-white leading-6 ">
-                        Log in 
+                        Log in
                       </Link>
                     </div>
                   ) : (

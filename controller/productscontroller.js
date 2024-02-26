@@ -33,7 +33,7 @@ export const Createproduct = async (req, res) => {
             return res.status(500).send({ error: 'PPrice is Required' })
         case !quantity:
             return res.status(500).send({ error: 'PQuantity is Required' })
-        case !image && image.size > 200000:
+        case !image:
             return res.status(500).send({ error: 'Image is Required' })
     }
 

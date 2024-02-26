@@ -1,11 +1,20 @@
 
 import React from 'react'
-
+import { motion } from 'framer-motion'
 function Footer() {
   return (
    <>
    <footer className="text-white  bg-black/70">
-  <div className="container px-5  py-5 mx-auto">
+  <motion.div
+          initial={{ y:'-100%', opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          exit={{ y: '100%', opacity: 0 }}
+          transition={{
+            stiffness: 100,
+            damping: 15,
+            duration: 1,
+            ease: "easeIn",
+          }} className="container px-5  py-5 mx-auto">
     <div className='text-center pb-5 font-bold'><h1>All Rights Reserved JOE SHOEE</h1></div>
     <div className="flex flex-wrap md:text-left text-center order-first">
       <div className="lg:w-1/4 md:w-1/2 w-full px-4">
@@ -95,9 +104,18 @@ function Footer() {
         </p>
       </div>
     </div>
-  </div>
+  </motion.div>
   <div className="bg-black">
-    <div className="container px-5 py-6 mx-auto flex items-center sm:flex-row flex-col">
+  <motion.div
+          initial={{ x:'-100%', opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          exit={{ x: '100%', opacity: 0 }}
+          transition={{
+            stiffness: 100,
+            damping: 15,
+            duration: 1,
+            ease: "easeIn",
+          }} className="container px-5 py-6 mx-auto flex items-center sm:flex-row flex-col">
       <a className="flex title-font font-medium items-center md:justify-start justify-center text-white-900">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -181,7 +199,7 @@ function Footer() {
           </svg>
         </a>
       </span>
-    </div>
+    </motion.div>
   </div>
 </footer>
 
