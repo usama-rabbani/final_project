@@ -5,14 +5,14 @@ import createcategory from '../models/createcategory.js'
 import fs from 'fs'
 import { request } from "http";
 import orders from "../models/orders.js";
-import braintree from 'braintree';
+// import braintree from 'braintree';
 
-var gateway = new braintree.BraintreeGateway({
-    environment: braintree.Environment.Sandbox,
-    merchantId: '8sqhcx7sn3p2359g',
-    publicKey: '3hkhrxkxcbqfxqfy',
-    privateKey: '25bc040be480a73a19de3dc6ff239411',
-  });
+// var gateway = new braintree.BraintreeGateway({
+//     environment: braintree.Environment.Sandbox,
+//     merchantId: '8sqhcx7sn3p2359g',
+//     publicKey: '3hkhrxkxcbqfxqfy',
+//     privateKey: '25bc040be480a73a19de3dc6ff239411',
+//   });
 
 
 export const Createproduct = async (req, res) => {
@@ -37,7 +37,7 @@ export const Createproduct = async (req, res) => {
             return res.status(500).send({ error: 'Image is Required' })
     }
 
-    // Create new product
+    // Create new produc
     const Products = new productsmodel({ ...req.fields, slug: slugify(name) })
     if (image) {
         Products.image.data = fs.readFileSync(image.path)
@@ -364,101 +364,134 @@ export const categorywiseController = async (req, res) => {
 
 // Payment Gateway
 
-export const braintreeController = async (req, res) => {
+// export const braintreeController = async (req, res) => {
 
-    try {
-        gateway.clientToken.generate({}, function (err, response) {
-          if (err) {
-            res.status(500).send(err);
-          } else {
-            res.send(response);
-          }
-        });
-      } catch (error) {
-        console.log(error);
-      }
+//     try {
+//         gateway.clientToken.generate({}, function (err, response) {
+//           if (err) {
+//             res.status(500).send(err);
+//           } else {
+//             res.send(response);
+//           }
+//         });
+//       } catch (error) {
+//         console.log(error);
+//       }
 
-}
+// }
 
 
 //Braintree Payment
 
-export const braintreepaymentController = async (req, res) => {
+// export const braintreepaymentController = async (req, res) => {
 
-    try {
-        const { cart, nonce } = req.body
-        let total = 0
-        cart.map((i) => { total += i.price });
+//     try {
+//         const { cart, nonce } = req.body
+//         let total = 0
+//         cart.map((i) => { total += i.price });
 
-        let newTransaction = gateway.transaction.sale(
-            {
-            amount: total,
-            paymentMethodNonce: nonce,
-            options: {
-                submitForSettlement: true
-            }
-        },
-          function (error, result) {
-                if (result) {
-                    const order = new orders({
-                        product: cart,
-                        payment: result,
-                        buyer: req.user._id,
-                    }).save()
-                    res.json({ ok: true })
-                }
-                else {
-                    res.status(500).send(error)
-                }
-            }
-        )
+//         let newTransaction = gateway.transaction.sale(
+//             {
+//             amount: total,
+//             paymentMethodNonce: nonce,
+//             options: {
+//                 submitForSettlement: true
+//             }
+//         },
+//           function (error, result) {
+//                 if (result) {
+//                     const order = new orders({
+//                         product: cart,
+//                         payment: result,
+//                         buyer: req.user._id,
+//                     }).save()
+//                     res.json({ ok: true })
+//                 }
+//                 else {
+//                     res.status(500).send(error)
+//                 }
+//             }
+//         )
 
-    } catch (error) {
-        console.log(error);
+//     } catch (error) {
+//         console.log(error);
       
-    }
+//     }
 
-}
+// }
 
 
-// Rough Payment
-export const  roughtesting = async (req,res) => {
-    try {
-      gateway.clientToken.generate({}, function (err, response) {
-        if (err) {
-          res.status(500).send(err);
-        } else {
-          res.status(200).json({ clientToken: response.clientToken });
-        }
-      });
-    } catch (error) {
-      res.status(500).send(error);
-    }
-  }
+ // Rough Payment
+// export const  roughtesting = async (req,res) => {
+//     try {
+//       gateway.clientToken.generate({}, function (err, response) {
+//         if (err) {
+//           res.status(500).send(err);
+//         } else {
+//           res.status(200).json({ clientToken: response.clientToken });
+//         }
+//       });
+//     } catch (error) {
+//       res.status(500).send(error);
+//     }
+//   }
 
 
 
   //    next 
 
 
-  export const  paymentgg = async (req,res) => {
-    try {
-      const { paymentMethodNonce, user_id } = req.body;
+//   export const  paymentgg = async (req,res) => {
+//     try {
+//       const { paymentMethodNonce, user_id } = req.body;
   
-      const transaction = await gateway.transaction.sale({
-        amount: '10.00',
-        paymentMethodNonce,
-        options: {
-          submitForSettlement: true,
-        },
-      });
+//       const transaction = await gateway.transaction.sale({
+//         amount: '10.00',
+//         paymentMethodNonce,
+//         options: {
+//           submitForSettlement: true,
+//         },
+//       });
   
-      if (transaction.success) {
-        res.status(200).json({ result: 'success' });
-      } else {
-        res.status(500).json({ result: 'failure' });
-      }
-    } catch (error) {
-      res.status(500).send(error);
+//       if (transaction.success) {
+//         res.status(200).json({ result: 'success' });
+//       } else {
+//         res.status(500).json({ result: 'failure' });
+//       }
+//     } catch (error) {
+//       res.status(500).send(error);
+//     }
+//   }
+
+
+export const userrequirements = async (req, res) => {
+    const { name,  category, quantity,  slug,size } = req.fields
+    const { image } = req.files
+    // Validation
+    switch (true) {
+        case !name:
+            return res.status(500).send({ error: 'Name is Required' })
+        case !category:
+            return res.status(500).send({ error: 'Category is Required' })
+        case !size:
+            return res.status(500).send({ error: 'Size is Required' })
+        case !quantity:
+            return res.status(500).send({ error: 'Quantity is Required' })
+        case !image:
+            return res.status(500).send({ error: 'Image is Required' })
     }
-  }
+
+    // Create new product
+    const Products = new productsmodel({ ...req.fields, slug: slugify(name) })
+    if (image) {
+        Products.image.data = fs.readFileSync(image.path)
+        Products.image.contentType = image.type
+    }
+    await Products.save()
+    res.status(201).send({
+        success: true,
+        message: 'product Created Successfully',
+        Products
+    })
+
+}

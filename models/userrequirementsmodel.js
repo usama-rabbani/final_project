@@ -1,28 +1,19 @@
 import mongoose from "mongoose";
 
-const productSchema = new mongoose.Schema({
+const RequiredSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-
     },
-
+    size: {
+        type: Number,
+        required: true,
+    },
     slug: {
         type: String,
         required: true,
 
     },
-   
-    description: {
-        type: String,
-        required: true,
-
-    },
-    price: {
-        type: String,
-        required: true,
-    },
-
     category: {
         type: String,
         ref: 'category',
@@ -33,16 +24,11 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-
     image: {
         data: Buffer,
         contentType: String,
     },
+}, { timestamps: true }
+)
 
-    shipping: {
-        type: String,
-
-    },
-}, { timestamps: true })
-
-export default mongoose.model('product', productSchema)
+export default mongoose.model('userrequirements', RequiredSchema)
